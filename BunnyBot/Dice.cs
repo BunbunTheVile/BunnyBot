@@ -6,15 +6,23 @@
         public int Sides { get; set; }
         public int Modifier { get; set; }
 
-        public int Roll()
+        public List<int> Roll()
         {
+            ///<summary>
+            ///Returns a list of results. The first element (index 0) is the sum of all rolls. The remaining elements (beginning with 
+            ///index 1) are all the single rolls on their own.
+            ///</summary>
             var random = new Random();
-            int result = Modifier;
-            for (int i = 0; i < Number; i++)
+            List<int> results = new() { Modifier };
+
+            for (int i = 1; i <= Number; i++)
             {
-                result += random.Next(1, Sides + 1);
+                var result = random.Next(1, Sides + 1);
+                results[0] += result;
+                results.Add(result);
             }
-            return result;
+
+            return results;
         }
 
         public static Dice? ParseDiceString(string diceString)

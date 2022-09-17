@@ -147,10 +147,17 @@ namespace BunnyBot
 
             // Build response 
 
+            var rolls = dice.Roll();
+
             var response = "";
             response += $"You rolled {dice.Number}d{dice.Sides}+{dice.Modifier}\n";
             if (dice.Modifier < 0) response.Replace("+", "");
-            response += $"Result: {dice.Roll()}";
+            response += $"Your rolls:";
+            for (int i = 1; i < rolls.Count; i++)
+            {
+                response += $" {rolls[i]}";
+            }
+            response += $"\n**Total: {rolls[0]}**";
 
             // Respond
 
