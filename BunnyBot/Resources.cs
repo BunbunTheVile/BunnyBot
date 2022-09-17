@@ -11,5 +11,7 @@ namespace BunnyBot
         };
 
         public static List<Emoji> Emojis => EmojiStrings.Select(x => new Emoji(x)).ToList();
+
+        public const string NotesPath = "notes.dat";
     }
 }

@@ -82,8 +82,7 @@ namespace BunnyBot
                 .AddOption(
                     "keyword",
                     ApplicationCommandOptionType.String,
-                    "A keyword to look for in my notes.",
-                    isRequired: true)
+                    "A keyword to look for in my notes.")
                 .Build();
             commands.Add(rememberCommand);
 
@@ -92,7 +91,7 @@ namespace BunnyBot
                 .WithDescription("Tell me which note to forget.")
                 .AddOption(
                     "id",
-                    ApplicationCommandOptionType.String,
+                    ApplicationCommandOptionType.Integer,
                     "The ID of the note I should forget",
                     isRequired: true)
                 .Build();

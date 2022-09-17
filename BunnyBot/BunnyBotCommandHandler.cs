@@ -34,12 +34,50 @@ namespace BunnyBot
 
         private static async Task RespondToNote(SocketSlashCommand command)
         {
-            await command.RespondAsync("Sorry, this command isn't implemented yet. ._.");
+            var content = command.Data.Options.First().Value as string;
+
+            if (content is null)
+            {
+                await command.RespondAsync("The content of the note can't be empty, dummy!");
+                return;
+            }
+
+            var note = Note.GetNewNote();
+            note.Content = content;
+
+            var noteText = "\n";
+            noteText += $"#{note.Id}#\t";
+            noteText += note.Content;
+
+            File.AppendAllText(Resources.NotesPath, noteText);
+
+            await command.RespondAsync($"I created the following note:\n{note}");
         }
 
         private static async Task RespondToRemember(SocketSlashCommand command)
         {
-            await command.RespondAsync("Sorry, this command isn't implemented yet. ._.");
+            string? keyword = null;
+            if (command.Data.Options.Count > 0)
+            {
+                keyword = command.Data.Options.First().Value as string;
+            }
+
+            var notes = Note.GetAllNotes();
+            
+            if (notes.Count == 0)
+            {
+                await command.RespondAsync("I don't have any notes yet. o:");
+                return;
+            }
+
+            if (keyword is not null)
+            {
+                notes = notes.Where(note => note.Content.Contains(keyword)).ToList();
+            }
+
+            var response = "";
+            notes.ForEach(note => response += $"{note}\n");
+            await command.RespondAsync(response);
         }
 
         private static async Task RespondToForget(SocketSlashCommand command)

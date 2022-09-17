@@ -7,6 +7,13 @@ public class Program
 {
     public static async Task Main(string[] args)
     {
+        // Initialize notes file
+
+        if (!File.Exists(Resources.NotesPath))
+        {
+            File.Create(Resources.NotesPath);
+        }
+
         // Declare variables
         
         DiscordSocketClient client = new DiscordSocketClient();
