@@ -17,7 +17,81 @@ namespace BunnyBot
                 case "poll":
                     await RespondToPoll(command);
                     break;
+                case "specific-poll":
+                    await RespondToSpecificPoll(command);
+                    break;
             }
+        }
+
+        private static async Task RespondToSpecificPoll(SocketSlashCommand command)
+        {
+            // Get dates
+
+            var dateString = command.Data.Options.First().Value as string;
+            if (dateString == null) 
+            {
+                await command.RespondAsync($"Your dates seem faulty. :/");
+                return;
+            }
+
+            var dates = ParseDateString(dateString);
+            if (dates == null)
+            {
+                await command.RespondAsync($"Your dates \"{dateString}\" don't seem right. Parsing them hurt my little CPU...");
+                return;
+            }
+            if (dates.Count > 20)
+            {
+                await command.RespondAsync($"{dates.Count} DATES?!? THAT'S JUST TOO MANY DATES! AAAAH!!! (max: 20)");
+                return;
+            }
+
+            // Build response
+
+            var response = "";
+            for (int i = 0; i < dates.Count; i++)
+            {
+                response += Resources.EmojiStrings[i] + " ";
+                response += dates[i].ToShortDateString() + "\n";
+            }
+
+            // Respond
+
+            await command.RespondAsync(response);
+            var message = await command.GetOriginalResponseAsync();
+            for (int i = 0; i < dates.Count; i++)
+            {
+                await message.AddReactionAsync(Resources.Emojis[i]);
+            }
+        }
+
+        private static List<DateOnly>? ParseDateString(string dateString)
+        {
+            var singleDateStrings = dateString.Split(",");
+            List<DateOnly> dates = new();
+            var currentYear = DateTime.Now.Year;
+
+            foreach (var singleDateString in singleDateStrings)
+            {
+                if (!(singleDateString.Length == 4 || singleDateString.Length == 6)) return null;
+
+                var year = currentYear;
+
+                var parseableDay = int.TryParse(singleDateString.Substring(0, 2), out var day);
+                var parseableMonth = int.TryParse(singleDateString.Substring(2, 2), out var month);
+                var parseableYear = true;
+                if (singleDateString.Length == 6) 
+                {
+                    parseableYear = int.TryParse(singleDateString.Substring(4, 2), out year);
+                    year += 2000;
+                }
+                
+                if (!parseableDay || !parseableMonth || !parseableYear) return null;
+
+                dates.Add(new DateOnly(year, month, day));
+            }
+
+            return dates;
         }
 
         private static async Task RespondToPoll(SocketSlashCommand command)

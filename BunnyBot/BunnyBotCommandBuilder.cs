@@ -54,6 +54,17 @@ namespace BunnyBot
                 .Build();
             commands.Add(pollCommand);
 
+            var specificPollCommand = new SlashCommandBuilder()
+                .WithName("specific-poll")
+                .WithDescription("Specify up to 20 dates for which to create a poll.")
+                .AddOption(
+                    "dates",
+                    ApplicationCommandOptionType.String,
+                    "A comma-separated list of dates in the format 'DDMM' or 'DDMMYY'. Example: 2412,2712,301222,010123",
+                    isRequired: true)
+                .Build();
+            commands.Add(specificPollCommand);
+
             try
             {
                 await guild.BulkOverwriteApplicationCommandAsync(commands.ToArray());
