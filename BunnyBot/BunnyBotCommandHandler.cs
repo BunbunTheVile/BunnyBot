@@ -20,7 +20,31 @@ namespace BunnyBot
                 case "specific-poll":
                     await RespondToSpecificPoll(command);
                     break;
+                case "note":
+                    await RespondToNote(command);
+                    break;
+                case "remember":
+                    await RespondToRemember(command);
+                    break;
+                case "forget":
+                    await RespondToForget(command);
+                    break;
             }
+        }
+
+        private static async Task RespondToNote(SocketSlashCommand command)
+        {
+            await command.RespondAsync("Sorry, this command isn't implemented yet. ._.");
+        }
+
+        private static async Task RespondToRemember(SocketSlashCommand command)
+        {
+            await command.RespondAsync("Sorry, this command isn't implemented yet. ._.");
+        }
+
+        private static async Task RespondToForget(SocketSlashCommand command)
+        {
+            await command.RespondAsync("Sorry, this command isn't implemented yet. ._.");
         }
 
         private static async Task RespondToSpecificPoll(SocketSlashCommand command)

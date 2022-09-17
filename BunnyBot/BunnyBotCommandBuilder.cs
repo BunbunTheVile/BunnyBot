@@ -65,6 +65,39 @@ namespace BunnyBot
                 .Build();
             commands.Add(specificPollCommand);
 
+            var noteCommand = new SlashCommandBuilder()
+                .WithName("note")
+                .WithDescription("Make a note so I can remember it for you!")
+                .AddOption(
+                    "content",
+                    ApplicationCommandOptionType.String,
+                    "The content of your note.",
+                    isRequired: true)
+                .Build();
+            commands.Add(noteCommand);
+
+            var rememberCommand = new SlashCommandBuilder()
+                .WithName("remember")
+                .WithDescription("Let me see if I can remember something like that.")
+                .AddOption(
+                    "keyword",
+                    ApplicationCommandOptionType.String,
+                    "A keyword to look for in my notes.",
+                    isRequired: true)
+                .Build();
+            commands.Add(rememberCommand);
+
+            var forgetCommand = new SlashCommandBuilder()
+                .WithName("forget")
+                .WithDescription("Tell me which note to forget.")
+                .AddOption(
+                    "id",
+                    ApplicationCommandOptionType.String,
+                    "The ID of the note I should forget",
+                    isRequired: true)
+                .Build();
+            commands.Add(forgetCommand);
+
             try
             {
                 await guild.BulkOverwriteApplicationCommandAsync(commands.ToArray());
